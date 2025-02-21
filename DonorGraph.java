@@ -11,18 +11,24 @@ public class DonorGraph {
     // HLA score for donor x and reciplient y.
     public DonorGraph(int[] donorToBenefit, int[][] matchScores){
         adjList = new ArrayList<>();
+        // Get number of recipients from matchScores sub array. The first index doesn't matter for size but 0 will always word
+        int numRecipients = matchScores[0].length;
+        // Create an array of booleans to mark if an edge exists between two recipients in order to keep the graph simple
+        boolean[][] edgeExist = new boolean[numRecipients][numRecipients];
         // Loop over each donor
         for (int i = 0; i < donorToBenefit.length; i++) {
-            // Add new LinkedList to adjList for current donor's matches
+            // Add new LinkedList to adjList to store current donor's matches
             adjList.add(new LinkedList<>());
-            // Loop over each of that donors matches
+            // Loop over each of that donors compatability with recipients
             for (int j = 0; j < matchScores[i].length; j++) {
-                // If the donor and beneficiary are compatible add a Match edge object
-                if (matchScores[i][j] >= 60) {
+                // If the donor and beneficiary are compatible and there isn't already an edge add a Match edge object
+                if (matchScores[i][j] >= 60 && !edgeExist[donorToBenefit[i]][j]) {
                     // Create an edge with current donor and recipient
                     Match edge = new Match(i, donorToBenefit[i], j);
                     // Add edge to adjList
                     adjList.get(i).add(edge);
+                    // Mark the edge as existing
+                    edgeExist[donorToBenefit[i]][j] = true;
                 }
             }
         }
