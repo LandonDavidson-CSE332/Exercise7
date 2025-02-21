@@ -10,8 +10,22 @@ public class DonorGraph {
     // donor-recipient pair. Specificically, matchScores[x][y] gives the
     // HLA score for donor x and reciplient y.
     public DonorGraph(int[] donorToBenefit, int[][] matchScores){
-        // TODO
         adjList = new ArrayList<>();
+        // Loop over each donor
+        for (int i = 0; i < donorToBenefit.length; i++) {
+            // Add new LinkedList to adjList for current donor's matches
+            adjList.add(new LinkedList<>());
+            // Loop over each of that donors matches
+            for (int j = 0; j < matchScores[i].length; j++) {
+                // If the donor and beneficiary are compatible add a Match edge object
+                if (matchScores[i][j] >= 60) {
+                    // Create an edge with current donor and recipient
+                    Match edge = new Match(i, donorToBenefit[i], j);
+                    // Add edge to adjList
+                    adjList.get(i).add(edge);
+                }
+            }
+        }
     }
 
     // Will be used by the autograder to verify your graph's structure.
