@@ -34,7 +34,6 @@ public class DonorGraph {
                 }
             }
         }
-        int tmp = 0;
     }
 
     // Will be used by the autograder to verify your graph's structure.
@@ -63,24 +62,39 @@ public class DonorGraph {
     // Returns an empty list if no cycle exists. 
     public List<Match> findCycle(int recipient){
         // Call the recersive helper to find cycles starting from the intended recipient node
-        return recFindCycle(new LinkedList<>(adjList.get(recipient)), recipient);
+        return recFindCycle(new LinkedList<>(), new LinkedList<>(), recipient, recipient);
     }
 
-    // Recursive DFS to find a cycle, returns a LinkedList of edges forming the cycle
-    private List<Match> recFindCycle(List<Match> path, int recipient) {
-        int node = 1;
-        int numEdges = 1;
-        for (int i = 0; i < numEdges; i++) {
-
+    // Recursive DFS to find a cycle including the recipient node, returns a LinkedList of edges forming the cycle
+    private List<Match> recFindCycle(List<Match> path, List<Integer> visitedNodes, int node, int target) {
+        // Get the edges of the current node
+        List<Match> edgeList = adjList.get(node);
+        // Loop over each edge
+        for (int i = 0; i < edgeList.size(); i++) {
+            // Get the current edge and add it to a new path LinkedList so they don't conflict
+            Match edge = edgeList.get(i);
+            // Check the node the edge points to hasn't been visited before
+            if (visitedNodes.contains(edge.recipient)) {
+                continue;
+            }
+            List<Match> copyPath = new LinkedList<>(path);
+            copyPath.add(edge);
+            // Add new node to visitedNodes
+            visitedNodes.add(edge.recipient);
+            // If the new edge points to the target recipient return the cycling path
+            if (edge.recipient == target) {
+                return copyPath;
+            }
+            // Otherwise call the recursive function on the new path
+            return recFindCycle(copyPath, visitedNodes, edge.recipient, target);
         }
-        
-        return path;
+        // If the node doesn't have any edges return null since it isn't a cycle
+        return null;
     }
 
     // returns true or false to indicate whether there
     // is some cycle which includes the given recipient.
     public boolean hasCycle(int recipient){
-        // TODO
-        return false;
+        return findCycle(recipient) == null ? false : true;
     }
 }
