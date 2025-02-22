@@ -17,7 +17,7 @@ public class DonorGraph {
         // Populate adjList with numRecipients LinkedLists
         adjList = new ArrayList<>();
         for (int i = 0; i < numRecipients; i++) {
-            adjList.add(new LinkedList<>());
+            adjList.add(new ArrayList<>());
         }
         // Loop over each donor
         for (int i = 0; i < donorToBenefit.length; i++) {
@@ -62,7 +62,7 @@ public class DonorGraph {
     // Returns an empty list if no cycle exists. 
     public List<Match> findCycle(int recipient){
         // Call the recersive helper to find cycles starting from the intended recipient node
-        return recFindCycle(new LinkedList<>(), new ArrayList<>(), recipient, recipient);
+        return recFindCycle(new ArrayList<>(), new ArrayList<>(), recipient, recipient);
     }
 
     // Recursive DFS to find a cycle including the recipient node, returns a LinkedList of edges forming the cycle
@@ -77,7 +77,7 @@ public class DonorGraph {
             if (visitedNodes.contains(edge.recipient)) {
                 continue;
             }
-            List<Match> copyPath = new LinkedList<>(path);
+            List<Match> copyPath = new ArrayList<>(path);
             copyPath.add(edge);
             // Add new node to visitedNodes
             visitedNodes.add(edge.recipient);
@@ -92,7 +92,7 @@ public class DonorGraph {
             }
         }
         // If the node doesn't have any edges return null since it isn't a cycle
-        return new LinkedList<>();
+        return new ArrayList<>();
     }
 
     // returns true or false to indicate whether there
