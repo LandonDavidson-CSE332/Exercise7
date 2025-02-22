@@ -62,7 +62,7 @@ public class DonorGraph {
     // Returns an empty list if no cycle exists. 
     public List<Match> findCycle(int recipient){
         // Call the recersive helper to find cycles starting from the intended recipient node
-        return recFindCycle(new LinkedList<>(), new LinkedList<>(), recipient, recipient);
+        return recFindCycle(new LinkedList<>(), new ArrayList<>(), recipient, recipient);
     }
 
     // Recursive DFS to find a cycle including the recipient node, returns a LinkedList of edges forming the cycle
@@ -85,8 +85,11 @@ public class DonorGraph {
             if (edge.recipient == target) {
                 return copyPath;
             }
-            // Otherwise call the recursive function on the new path
-            return recFindCycle(copyPath, visitedNodes, edge.recipient, target);
+            // Otherwise call the recursive function on the new path, if it isn't empty return the found cycle
+            path = recFindCycle(copyPath, visitedNodes, edge.recipient, target);
+            if (!path.isEmpty()) {
+                return path;
+            }
         }
         // If the node doesn't have any edges return null since it isn't a cycle
         return new LinkedList<>();
