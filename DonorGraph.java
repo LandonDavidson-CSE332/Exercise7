@@ -89,12 +89,12 @@ public class DonorGraph {
             return recFindCycle(copyPath, visitedNodes, edge.recipient, target);
         }
         // If the node doesn't have any edges return null since it isn't a cycle
-        return null;
+        return new LinkedList<>();
     }
 
     // returns true or false to indicate whether there
     // is some cycle which includes the given recipient.
     public boolean hasCycle(int recipient){
-        return findCycle(recipient) == null ? false : true;
+        return findCycle(recipient).size() != 0;
     }
 }
